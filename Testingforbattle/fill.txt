@@ -1,0 +1,29 @@
+1 100 20 20 Warrior, - Medium Hits and takes Medium Hits
+1 100 3 100Wizard, - Can hit super hard or fizzle also takes hard hits or blocks with magic shield
+1 100 30 40Rogue, - Hits hard gets hit even harder
+2 1 0 0Auren,  - a tall and proud cow like people known for their brute strength
+2 2 0 0Elf, - same as every elf ever also known for their ability to dodge
+2 3 0 0Orc, - tall muscular green creatures known for their sturdyness
+2 4 0 0Fairy, - a small race with with glowing wings generally spellcasters
+2 5 0 0Troll, - a very tall race that comes in many colors also regens more health between battles
+3 50 3 8Rat,.
+3 60 3 10Jackal,.
+3 60 5 10Zombie,.
+3 110 5 10Cultists,.
+3 80 10 15Skeleton,.
+3 100 15 20Ogre,.
+3 150 25 25Elemental,.
+3 200 30 60Demon,.
+3 50 5 100RNG,.
+3 300 20 60Elemental Lord,.
+3 500 40 60Kil'jaeden,.
+4 1 500 0Rogue,Orc.Badnewsbear?Kil'jaeden
+4 2 300 0Warrior,Elf.Jordan?Eorzea
+4 3 400 0Wizard,Elf.Sad?Norrath
+4 1 500 0Rogue,Orc.Notgeil?Azeroth
+4 3 5 0Wizard,Auren.Sotami?Kil'jaeden
+4 2 60 0Warrior,Troll.Dctorfeelgud?Eorzea
+4 1 500 0Rogue,Auren.Eidyn?Norrath
+4 3 100000000 0Wizard,Fairy.Hippyfighter?Eorzea
+4 2 3 0Warrior,Orc.Cotchery?Kil'jaeden
+4 3 0 0Wizard,Fairy.Feardotlaugh?Azeroth

@@ -1,0 +1,11 @@
+4 1Rogue,Auren.Eidyn?
+4 1Rogue,Orc.Notgeil?
+4 1Rogue,Orc.Badnewsbear?
+4 1Warrior,Orc.Cotchery?
+4 1Warrior,Troll.Dctorfeelgud?
+4 1Warrior,Elf.Jordan?
+4 1Wizard,Fairy.Feardotlaugh?
+4 1Wizard,Fairy.Hippyfighter?
+4 1Wizard,Auren.Sotami?
+4 1Wizard,Elf.Sad?
+4 1fdsfasf,aaw.daeew?
