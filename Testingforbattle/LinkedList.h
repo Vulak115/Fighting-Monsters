@@ -25,9 +25,6 @@ public:
 	void remove(T);
 	bool search(T);
 	T get(T);
-
-
-
 };
 //ListNode<T>*
 #endif
@@ -37,7 +34,6 @@ public:
 template<class T>
 T LinkedList<T>::get(T position)
 {
-	cout << position << endl;
 	ListNode<T> *nodePtr;   // to walk the list
 	nodePtr = head; //intilazing 
 	T temp = 0; //intilazing 
@@ -100,8 +96,6 @@ void LinkedList<T>::insertNode(T newValue)
 		}
 
 	}
-
-
 }
 template <class T>
 void LinkedList<T>::append(T num)

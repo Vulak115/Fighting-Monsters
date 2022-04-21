@@ -8,15 +8,22 @@
 #include "Races.h"
 #include "Classes.h"
 #include "Character.h"
-#include "Rogue.h"
 #include "Monster.h"
+#include "Rogue.h"
+#include "Warrior.h"
+#include "Wizard.h"
+
 using namespace std;
+enum note { middleC, Csharp, Cflat }; // Etc.
+void Battle(Character*,Character&,Monster&,string);
+void makeChar(Character*);
+void fillLists(Character*, Monster&);
 
 void fillLists(Character *c,Monster&m) //loads text from the fill.txt
 {
+	
 	int type, type2, type3, type4;
 	string  text, text2, text3, text4, line;
-	Rogue *r;
 	ifstream infile, infile2;
 	infile.open("fill.txt");
 	infile2.open("savedCharacters.txt");
@@ -32,11 +39,10 @@ void fillLists(Character *c,Monster&m) //loads text from the fill.txt
 			getline(ss, text2, '.');
 			getline(ss, text3, '?');
 			getline(ss, text4);
-
 			switch (type)
 			{
 			case 1:
-				c->LinkedList<Classes>::insertNode( Classes(text, text2));
+				c->LinkedList<Classes>::insertNode(Classes(text, text2));
 				break;
 			case 2:
 				c->LinkedList<Races>::insertNode(Races(text, text2));
@@ -48,17 +54,23 @@ void fillLists(Character *c,Monster&m) //loads text from the fill.txt
 				switch (type2)
 				{
 				case 1:
-				//	c = new Rogue(text, text2, text3, type3);
+				
+					//c = new Rogue(Rogue(text, text2, text3, type3));
+					 
 										//c->LinkedList<Character>::insertNode(new Rogue(text, text2, text3, type3))
 				//	c->LinkedList<Character>::insertNode(Rogue(text,text2,text3,type3)) = new Rogue(text, text2, text3, type3);
-					cout << type3 << " type3" << endl;
+					
 				c->LinkedList<Character>::insertNode(Rogue(text, text2, text3, type3));
 					break;
 				case 2:
-					c->insertCharacter(text, text2, text3, type3);
+				
+				//	c = new Warrior();
+					c->LinkedList<Character>::insertNode(Warrior(text, text2, text3, type3));
 					break;
 				case 3:
-					c->insertCharacter(text, text2, text3, type3);
+					
+					//c = new Wizard();
+					c->LinkedList<Character>::insertNode(Wizard(text, text2, text3, type3));
 					break;
 				}
 				//Character::Character(Character(text, text2, text3, text4));
@@ -94,39 +106,99 @@ void makeChar(Character*tt)
 	cout << "Now to name your hero!\n" "Enter chararacters name: ";
 	cin.ignore();
 	getline(cin, name);
-	//tt->insertCharacter(archtype, race, name, 10);
-	
-
-
+	if (archtype == "Wizard")
+		tt->LinkedList<Character>::insertNode(Wizard(archtype, race, name, 0));
+	if (archtype == "Rogue") 
+		tt->LinkedList<Character>::insertNode(Rogue(archtype, race, name, 0));
+	if (archtype == "Warrior")
+		tt->LinkedList<Character>::insertNode(Warrior(archtype, race, name, 0));
 }
-void makeChar(Character*);
-void fillLists(Character*,Monster&);
+
+// Identical function from before:
+void Battle(Character*c,Character& i,Monster&m,string name) {
+	int cpick = 0, heroAttack = 0, monsterAttack = 0, yu = 1;
+	double lvl = 0;
+	string  archtype, monsterName;
+	Character s;
+	char pick = 'b';
+	bool status = true;
+	
+	lvl=c->getLvl(name);
+	while (pick != 'n')
+	{
+	//	cout << "Enter Difficulty choice 1 is easy 2 is medium 3 is hard: ";
+		//cin >> cpick;
+		i.setStats(lvl);
+		monsterName = m.pickMonster(lvl);
+		m.getMHP(monsterName);
+		while (i.getCurrHP() > 0 && m.getCurMonHP() > 0)
+		{
+			i.setRacials(c,status);
+			cout << "Round " << yu++ << endl;
+			heroAttack = i.Attack();
+			monsterAttack = m.getMAttack(monsterName,c);
+			m.getMHP(name);
+			cout << name << " hits " << monsterName << " for " << heroAttack << " damage.\n";
+			m.MHP(heroAttack);
+			i.updateCharHP(monsterAttack,monsterName,c);
+			cout<<	monsterName << " has " << m.getCurMonHP() << "/" << m.getMonsterHP() << " hp left.\n";
+			status = false;
+		}
+		//	tt = new Character;
+		if (m.getCurMonHP() <= 0)
+		{
+			cout << "You won!!!\n";
+			c->updateEXP(name, m.getMonsterHP());
+			lvl=c->getLvl(name);
+
+		}
+		else
+			cout << "You lost!!!\n";
+		status = true;
+		yu = 1;
+		c->printOut();
+		cout << "Keep Battling?(y/n)";
+		cin >> pick;
+		//i.test(c);
+	}
+	pick = 'u';
+	m.displayList();
+}
+
+// New function:
+//void f(Instrument& i) { i.adjust(1); }
+
+// Upcasting during array initialization:
+
+
 int main()
 {
+	Wizard wiz;
+	Warrior war;
 	Rogue r;
+	srand(time(NULL));
 	bool status = true;
 	cout << setprecision(0) << fixed;
 	int choice = 0, heroAttack = 0, monsterAttack = 0, monHP = 0;
-	char pick = 'n';
+	char pick = 'u';
 	int cpick;
+	
 	string archtype, race, name, monsterName;
-	Character *tt, s;
-	tt = new Rogue();
+	Character* tt = new Rogue;
+	Character *oo = new Rogue;
+	Character *io = new Warrior;
+	//tt = new Rogue(), new Wizard(),new Warrior();
+	//tt = new Wizard;
+	//tt = new Wizard();
+	Character s;
+	//tt[3] = { new Rogue, new Wizard, new Warrior };
+	//Character *b[3] = { new Rogue, new Wizard, new Warrior };
 	Monster m;
+	
 	fillLists(tt,m);
-	while (choice != 5)
-	{
-		if (status) {
-			cout << "Login to your server\n";
-			m.displayList();
-		
-			cout << "Enter Choice: ";
-			cin >> cpick;
-			
-			cout << endl;
-			status = false;
-		}
-		cout << "1 - Make a Character\n" "2 - Delete a Character\n""3 - Change servers\n" "5 - Quit\n" "Enter Choice: ";
+		while (choice !=5)
+		{ 
+		cout << "1 - Make a Character\n" "2 - Delete a Character\n""3 - Goto Battle\n" "5 - Quit\n" "Enter Choice: ";
 		cin >> choice;
 		cout << endl;
 		if (choice != 5)
@@ -136,6 +208,7 @@ int main()
 			case 1:
 				makeChar(tt);
 				tt->LinkedList<Character>::displayList();
+				tt->printOut();
 				break;
 			case 2:
 				cout << "Type in the name of the Character you would like to delete.\n" "Enter name: ";
@@ -143,57 +216,31 @@ int main()
 				getline(cin, name);
 				tt->LinkedList<Character>::remove(name);
 				tt->LinkedList<Character>::displayList();
+				tt->printOut();
 				break;
 			case 3:
-				cout << "Pick your server - to view characters on that server\n";
-				cout << left << setw(18) << "Character Name" << left << setw(13) << "Class" << "Race" << setw(10);
 				tt->LinkedList<Character>::displayList();
+				cout << "Enter Choice: ";
 				cin >> cpick;
-				*tt= tt->LinkedList<Character>::get(cpick);
+				*tt = tt->LinkedList<Character>::get(cpick);
 				name = tt->getName();
-				tt->getLvl(name);
-				tt->setStats();
-				monsterName = m.pickMonster();
-				m.getMHP(monsterName);
-			while (tt->getCurrHP() > 0 && m.getCurMonHP() > 0)
-			{
-				heroAttack = tt->Attack();
-				monsterAttack = m.getMAttack(monsterName);
-				m.getMHP(name);
-				cout << name << " hits " << monsterName << " for " << heroAttack << " damage.\n";
-				m.MHP(heroAttack);
-				cout << monsterName << " hits " << name << " for " << monsterAttack << " damage.\n";
-				tt->updateCharHP(monsterAttack);
-				cout << name << " has " << tt->getCurrHP() << "/" << tt->getHP() << " hp left.\n" <<
-					monsterName << " has " << m.getCurMonHP() << "/" << m.getMonsterHP() << " hp left.\n";
+				archtype = tt->getClass();
+				if (archtype == "Wizard")
+					Battle(tt, wiz, m, name);
+				if (archtype == "Warrior")
+					Battle(tt, war, m, name);
+				if (archtype == "Rogue")
+					Battle(tt, r, m, name);
 
-			}
-			if (m.getCurMonHP() <= 0)
-				cout << "You won!!!\n";
-			else
-				cout << "You lost!!!\n";
-			
-			m.displayList();
-				//tt->print(name);
-				//cout << tt->Attack() << " atook" << endl;
-					
-				//	r.print(name);
-					
-					break;
-		
 
-			case 4:
-				m.displayList();
-				monsterName = m.pickMonster();
-				cout << m.getMAttack(monsterName) << " rawr " <<monsterName <<endl;
 				break;
 
+
+			case 4:
+				break;
 			}
 		}
 	}
-	tt->printOut();
-
-
 
 
 	return 0;

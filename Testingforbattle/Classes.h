@@ -13,6 +13,7 @@ protected:
 	int position;
 public:
 	Classes() { className = " "; classDesc = " "; position = 0; }
+	~Classes(){}
 	Classes(string cn, string cd) { className = cn; classDesc = cd; }
 	Classes(string *cn, string *cd) { classNam = cn; classDes = cd; }
 	Classes(int p) { position = p; }
@@ -36,6 +37,7 @@ public:
 #endif
 bool Classes::operator<(Classes cc) //overloaded < for the Item class
 {
+	
 	bool status;
 	if (getClassName()< cc.getClassName())
 		status = true;

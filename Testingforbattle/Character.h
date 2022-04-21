@@ -12,27 +12,37 @@ protected:
 	string race;
 	int position;
 	string name;
-	double experience;
-	int lvl;
-	int currHP;
-	int healthPoints;
+	long double experience;
+	long double lvl;
+	double currHP;
+	double healthPoints;
+	int minDmg;
+	int maxDmg;
+	double dodge;
 public:
 
-	Character() { healthPoints = 0; Class = ""; position = 0; name = "";  race = " "; experience = 0; lvl = 0; currHP = 0; }
-	Character(string c, string r, string n, int s);
+	Character() { healthPoints = 1; Class = " "; position = 0; name = " ";  race = " "; experience = 0; lvl = 0; currHP = 0; minDmg = 0; maxDmg = 0; dodge = 0; }
+	~Character() {  }
+	//Character(string c = "ff" , string r ="dd" , string n = "dde", int s = 55  ){ Class = c; race = r; name = n; experience = s; cout << "Character con" << endl; }
+	//Character(string c, string r, string n, int s, int t);
 	Character(string n) { name = n; } //the sp is a blank spot its just there to let me call the constructor and not the name one up it
 	Character(int r) { position = r; } //for the get function in LinkedList
 	string getName() { return name; }
 	string getRace() { return race; }
 	string getClass() { return Class; }
-	double getExp() { return experience; }
-	int getHP() { return healthPoints; }
-	int getCurrHP() { return currHP; }
-	virtual	void updateCharHP(int atk) { currHP -= atk; if (currHP < 0) currHP = 0; }
+	long double getExp() { return experience; }
+	double getHP() { return healthPoints; }
+	double getCurrHP() { return currHP; }
+	double getDodge() { return dodge; }
+	int getMinDmg() { return minDmg; }
+	int getMaxDmg() { return maxDmg; }
+	int increaseEXP(int hp) { return experience += hp; }
+	virtual	void updateCharHP(int atk,string,Character*) { currHP -= atk; if (currHP < 0) currHP = 0; }
 	virtual int Attack();
-	void getLvl(string);
-	int getl() { return lvl; cout << experience << " character expereience" << endl; }
+	double getLvl(string);
+	double getl() { return lvl;  }
 	int getPosition() { return position; }
+	void updateEXP(string ,int);
 	bool operator <(Character);
 	bool operator!=(Character);
 	bool operator==(Character);
@@ -41,7 +51,7 @@ public:
 	void displayServerCharacters(string s);
 	void printOut();
 	void insertCharacter(string, string, string, int);
-	virtual void setStats();
+	virtual void setStats(double);
 	virtual void print(string);
 	string toString() const { return name; } //lets me turn objects into strings so that I can store them in different classes or parameters
 	template <typename T>
@@ -51,21 +61,73 @@ public:
 		return ss.str();
 	}
 	//operator string() const { return serverList; }//lets me turn objects into strings so that I can store them in different classes or parameters not as specific as the above function though
-
+	virtual void setRacials(Character*,bool&);
 	void operator=(Character &right)
 	{
-		cout << "= operator" << endl;
+		
 		Class = right.Class;
 		position = right.position;
 		race = right.race;
 		name = right.name;
 		experience = right.experience;
 			healthPoints = right.healthPoints;
+			currHP = right.currHP;
+			lvl = right.lvl;
+			dodge = right.dodge;
 		getName() = right.getName();
 	}
 	
 };
 #endif
+void Character::setRacials(Character*c,bool &status)
+{
+	dodge = rand() % (100 - 1 + 1) + 1;
+	if (c->getRace() == "Troll"&&getCurrHP() <= (getHP() - 5)) currHP += 5;
+	else if (c->getRace()=="Troll")currHP = getHP();
+
+	if (c->getRace() == "Orc"&&status)
+	{
+		minDmg +=10;
+		maxDmg += 10;
+	}
+	if (c->getRace() == "Elf" && dodge < 55 && c->getClass() == "Rogue")
+		dodge = 1;
+	else if (c->getRace() == "Elf" && dodge < 91 && c->getClass() == "Wizard")
+		dodge = 20;
+	else if (c->getRace() == "Elf"&&status)
+	{
+		currHP += (currHP*.1);
+		healthPoints += (healthPoints*.1);
+	}
+	if (c->getRace() == "Auren"&&status)
+	{
+		currHP += (currHP*.1);
+		healthPoints += (healthPoints*.1);
+	}
+//fairy racial is in monsterAttack
+}
+void Character::updateEXP(string n,int hp)
+{
+	
+	bool status = true;
+	ListNode<Character> * nodePtr;
+	nodePtr = LinkedList<Character>::head;
+
+		
+	while (nodePtr != nullptr)
+	{
+		if (!(n != nodePtr->value.getName()))
+		{
+			nodePtr->value.increaseEXP(hp);
+			status = false;
+		}
+		nodePtr = nodePtr->next;
+	}
+
+	if (status)
+		cout << "Not found!" << endl;
+
+}
 void Character::print(string n)
 {
 	cout << "badly" << endl;
@@ -90,12 +152,12 @@ void Character::print(string n)
 		cout << "Not found!" << endl;
 
 }
-void Character::setStats()
+void Character::setStats(double lvl)
 {
-	healthPoints = healthPoints*(.05);
+	healthPoints = healthPoints*(2);
 	
 }
-void Character::getLvl(string n)
+double Character::getLvl(string n)
 {
 	ListNode<Character>* nodePtr;
 	nodePtr = LinkedList<Character>::head;
@@ -107,24 +169,36 @@ void Character::getLvl(string n)
 	{
 		if (!(n != nodePtr->value.getName()))
 		{
-			lvl= nodePtr->value.getExp() / (100 + (.01*nodePtr->value.getExp()));		
+			lvl = nodePtr->value.getExp() / (100+ (.001*nodePtr->value.getExp()));		
+			cout << n << " is " << lvl << endl;
+			return lvl;
 		}
 		nodePtr = nodePtr->next;
 	}
-}
-int Character::Attack()
-{
 	return 0;
 }
 
-
-Character::Character(string c, string r, string n, int s)
+int Character::Attack()
 {
-	cout << experience << " " << s << " character exp now" << endl;
-	Class = c; race = r; name = n; experience = s;
+	cout << "Character!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+	return 0;
+
 }
 
-void Character::insertCharacter(string c, string r, string n, int s)
+
+/*Character::Character(string c, string r, string n, int s)
+{
+
+	Class = c; race = r; name = n; experience = s; cout << "Character con" << endl;
+}*/
+
+/*Character::Character(string c, string r, string n, int s,int t)
+{
+
+	Class = c; race = r; name = n; experience = s; cout << "Character con" << endl;
+}*/
+
+/*void Character::insertCharacter(string c, string r, string n, int s)
 {
 	//cout << "make it" << endl;
 	bool status;
@@ -136,7 +210,7 @@ void Character::insertCharacter(string c, string r, string n, int s)
 	else
 		cout << "Name already in use!" << endl;
 
-}
+}*/
 
 
 ostream& operator<< (ostream& outs, const Character& obj) {
@@ -145,14 +219,14 @@ ostream& operator<< (ostream& outs, const Character& obj) {
 
 ostream& operator<<(ostream& out, Character& items) //overloaded << for the Item class
 {
-	cout << "<< operator" << endl;
+
 	out <<left << setw(18) << items.getName() << left << setw(13)<< items.getClass() <<  items.getRace() <<setw(10)<< right << items.getExp();
 	return out;
 }
 
 bool Character::operator<(Character cc) //overloaded < for the Item class
 {
-	cout << "< operator" << endl;
+	
 	bool status;
 
 	if (getClass() < cc.getClass())
@@ -165,7 +239,7 @@ bool Character::operator<(Character cc) //overloaded < for the Item class
 
 bool Character::operator==(Character c)
 {
-	cout << "== operator" << endl;
+	
 	bool status;
 
 	if (getPosition() == c.getPosition())
@@ -177,14 +251,14 @@ bool Character::operator==(Character c)
 }
 Character Character::operator++(int)
 {
-	cout << "++ operator" << endl;
+
 	position++;
 	return *this;
 }
 
 bool Character::operator!=(Character c)
 {
-	cout << "!= operator" << endl;
+
 	if (getName() != c.getName())
 		return true;
 	return false;
@@ -222,6 +296,7 @@ void Character::printOut()
 {
 	ListNode<Character> *nodePtr;
 	nodePtr = LinkedList<Character>::head;
+	int type = 0, type2 = 0;
 	string c, r, n, s;
 	ofstream myfile;
 	myfile.open("savedCharacters.txt");
@@ -230,8 +305,12 @@ void Character::printOut()
 		c = nodePtr->value.getClass();
 		r = nodePtr->value.getRace();
 		n = nodePtr->value.getName();
+		type2 = nodePtr->value.getExp();
+		if (c == "Wizard") type = 3;
+		if (c == "Rogue") type = 1;
+		if (c == "Warrior")type = 2;
 
-		myfile << 4 << " " << 1 << c << "," << r << "." << n << "?" << s << "\n";
+		myfile << 4 << " " << type << " " << type2<< " " <<0<<c << "," << r << "." << n << "?" << s << "\n";
 		nodePtr = nodePtr->next;
 	}
 	myfile.close();

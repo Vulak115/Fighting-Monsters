@@ -11,6 +11,7 @@ protected:
 	int position;
 public:
 	Races() { raceList = " "; }
+	~Races() {  }
 	Races(string rl, string rd) { raceList = rl; raceDesc = rd; }
 	Races(int p) { position = p; }
 	int getPosition() { return position; }

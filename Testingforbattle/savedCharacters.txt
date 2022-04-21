@@ -1,11 +1,16 @@
-4 1Rogue,Auren.Eidyn?
-4 1Rogue,Orc.Notgeil?
-4 1Rogue,Orc.Badnewsbear?
-4 1Warrior,Orc.Cotchery?
-4 1Warrior,Troll.Dctorfeelgud?
-4 1Warrior,Elf.Jordan?
-4 1Wizard,Fairy.Feardotlaugh?
-4 1Wizard,Fairy.Hippyfighter?
-4 1Wizard,Auren.Sotami?
-4 1Wizard,Elf.Sad?
-4 1fdsfasf,aaw.daeew?
+4 1 732990 0Rogue,Fairy.Someone?
+4 1 500 0Rogue,Orc.Badnewsbear?
+4 1 500 0Rogue,Orc.Notgeil?
+4 1 0 0Rogue,Auren.Eidyn?
+4 2 0 0Warrior,Auren.Gee?
+4 2 300 0Warrior,Elf.Jordan?
+4 2 0 0Warrior,Troll.Dctorfeelgud?
+4 2 0 0Warrior,Orc.Cotchery?
+4 3 400 0Wizard,Elf.Sad?
+4 3 5 0Wizard,Auren.Sotami?
+4 3 0 0Wizard,Fairy.Hippyfighter?
+4 3 88790 0Wizard,Fairy.Feardotlaugh?
+4 3 10 0fdsfasf,aaw.daeew?
+4 3 10 0fdsfasf,aaw.daeew?
+4 3 10 0fdsfasf,aaw.daeew?
+4 3 10 0fdsfasf,aaw.daeew?

@@ -6,7 +6,7 @@
 using namespace std;
 class Monster : public LinkedList<Monster>
 {
-private:
+protected:
 	string monsterName;
 	int monsterHP;
 	int currMonHP;
@@ -17,6 +17,7 @@ public:
 	Monster() { monsterHP = 0; monsterMinDMG = 0; monsterMaxDMG = 0; position = 0; currMonHP = 0; }
 	Monster(int p) { position = p; }
 	Monster(string mn, int mhp, int mid, int mmd) { monsterName = mn; monsterHP = mhp; monsterMinDMG = mid; monsterMaxDMG = mmd; }
+	~Monster(){}
 	string getMName() { return monsterName; }
 	int getMonsterHP() { return monsterHP; }
 	int getmMinDmg() { return monsterMinDMG; }
@@ -25,10 +26,10 @@ public:
 	int getPosition() { return position; }
 	void MHP(int atk) { currMonHP -= atk; if (currMonHP < 0) currMonHP = 0;
 	}
-	int getMAttack(string);
+	int getMAttack(string,Character*);
 	void UpdateMHP(string,int);
 	void getMHP(string);
-	string pickMonster();
+	string pickMonster(int);
 	friend ostream& operator<<(ostream&, Monster&);
 	bool operator==(Monster);
 	Monster operator++(int);
@@ -74,11 +75,10 @@ void Monster::UpdateMHP(string n,int atk)
 }
 void Monster::getMHP(string n)
 {
-	int p = 0;
-	bool status = true;
+	//int p = 0;
+	//bool status = true;
 	ListNode<Monster>* nodePtr;
 	nodePtr = LinkedList<Monster>::head;
-
 	while (nodePtr != nullptr)
 	{	
 		if (n == nodePtr->value.getMName())
@@ -101,36 +101,46 @@ ostream& operator<<(ostream& out, Monster& items) //overloaded << for the Item c
 	out <<left<<setw(15)<< items.getMName() << items.getMonsterHP() <<setw(5)<<right<< items.getmMinDmg() << setw(5) << items.getmMaxDmg();
 	return out;
 }
-int Monster::getMAttack(string s)
+int Monster::getMAttack(string s,Character*c)
 {
-	int p = 1;
+	int miss = rand() % (100 - 1 + 1) + 1;
 	bool status = true;
 	ListNode<Monster>* nodePtr;
 	nodePtr = LinkedList<Monster>::head;
-	cout << left << setw(18) << "Character Name" << left << setw(13) << "Class" << "Race" << setw(10) << right << "Server: " << s << endl;
 	while (nodePtr != nullptr)
 	{
 		if (s == nodePtr->value.getMName())
 		{
-			int damage = 0;
-			srand(time(NULL));
-			damage = rand() % (nodePtr->value.getmMaxDmg() - nodePtr->value.getmMinDmg() + 1) + nodePtr->value.getmMinDmg();
-			status = false;
-			return damage;
+			if (c->getRace() == "Fairy"&& miss < 10)
+				cout << s<<" misses you because you're a tiny fairy\n";
+			else
+			{
+				int damage = 0;
+				damage = rand() % (nodePtr->value.getmMaxDmg() - nodePtr->value.getmMinDmg() + 1) + nodePtr->value.getmMinDmg();
+				status = false;
+				return damage;
+			}
 		}
 		nodePtr = nodePtr->next;
 	}
 	if (status)
 		return 0;
 }
-string Monster::pickMonster()
+string Monster::pickMonster(int pick)
 {
 	string mName;
 	int random = 0;
-	srand(time(NULL));
-	random = rand() % (11-1+1)+1;
-		mName = to_string(get(random));
-		cout << mName << " check " <<random<< endl;
+	if (pick >=0)
+		random = rand() % (4 - 1 + 1) + 1;
+	if (pick >20)
+		random = rand() % (8 - 3 + 1) + 3;
+	if (pick > 40)
+		random = rand() % (12 - 7 + 1) + 7;
+	if (pick > 150)
+		random = 13;
+	Monster m;
+		m = get(random);
+		mName = m.getMName();
 		return mName;
 }
 bool Monster::operator==(Monster c)
